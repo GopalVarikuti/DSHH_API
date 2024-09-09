@@ -1,3 +1,8 @@
+using DSHH_API.Models;
+using DSHH_API.Services;
+using DSHH_API.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +12,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+IConfiguration configuration;
+
+configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
+builder.Services.AddDbContext<DshhContext>
+
+    (option => option.UseSqlServer(configuration.GetConnectionString("DSHHConnection")));
+builder.Services.AddScoped<IStatService, StatService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
